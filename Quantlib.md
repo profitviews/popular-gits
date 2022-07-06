@@ -10,7 +10,7 @@ The Categories are manually added after a brief look at the repo.  This is usefu
 
 URL | Popularity | Categories
 ---|---|---
-<github.com/lballabio/QuantLib> | 3145 | 
+[github.com/lballabio/QuantLib](github.com/lballabio/QuantLib) | 3145 | 
 <github.com/sindresorhus/awesome> | 762 | Meta
 <github.com/jwasham/coding-interview-university> | 754 | Ed
 <github.com/EbookFoundation/free-programming-books> | 723 | Ed
