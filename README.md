@@ -1,5 +1,7 @@
 # Popular Gits
 
+You know who you are.
+
 We all know them - those dudes at high-school who were popular.  As irritating as it was, 
 you had to keep on their good sides and keep up with what they were doing.
 Looking back, well, they weren't so bad.  Good on em really!  I would've if I could've.
