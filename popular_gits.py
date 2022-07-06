@@ -31,7 +31,13 @@ class popular_gits():
         return (paged.get_page(i) for i in range(0, paged.totalCount//popular_gits.page_size+1))
 
     def __init__(self, db_name, github_key, repo_org, repo_name):
-        """Set up a repo to find its popular gits"""
+        """Set up a repo to find its popular gits
+        
+        db_name: the name of the SQLite database that will be created (or accessed)
+        github_key: the Github Access Token that will be used to run the Github API functions
+        repo_org: the 'repo_org' part of https://github.com/{repo_org}/{repo_name}
+        repo_name: the 'repo_name' part
+        """
         self.db_name = db_name
         self.repo_org = repo_org
         self.repo_name = repo_name
