@@ -41,7 +41,8 @@ This is tested with Ubuntu Linux 22.04.  It should work with little effort on ot
 1. `pip install PyGithub`
 1. Get a [Github account](https://github.com).  This is free and very easy.
    Once done, get a [Personal Access Token](https://github.com/settings/tokens).
-1. Put your Personal Access Token in environment variable `GITHUB_KEY` via
+1. To experiment with Popular Gits, install [Jupyter Lab](https://jupyter.org/install) and then use [our notebook](/popular_gits.ipynb) to start.
+1. To use this notebook as-is, put your Personal Access Token in environment variable `GITHUB_KEY` via
 
    ```shell
    export GITHUB_KEY="<your Personal Access Token>"
@@ -49,7 +50,6 @@ This is tested with Ubuntu Linux 22.04.  It should work with little effort on ot
 
    you might put this in your `~/.bashrc` or similar.
 
-1. To experiment with Popular Gits, install [Jupyter Lab](https://jupyter.org/install) and then use [our notebook](/popular_gits.ipynb) to start.
 
 It will also be useful to install [SQLite Database Browser](https://sqlitebrowser.org/) so 
 that you can easily create `.csv` files and similar.
