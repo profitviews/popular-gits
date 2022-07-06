@@ -2,9 +2,10 @@
 
 You know who you are.
 
-We all know them - those dudes at high-school who were popular.  As irritating as it was, 
-you had to keep on their good sides and keep up with what they were doing.
-Looking back, well, they weren't so bad.  Good on em really!  I would've if I could've.
+Those popular people in high-school who most tend to have a mixed relationship with.  
+As irritating as it was, you had to keep on their good sides and keep up with what they were doing.
+
+Looking back, well, they weren't so bad.  Good on 'em really!  I would've if I could've.
 
 This repo is is dedicated to the popular gits.
 
@@ -15,14 +16,14 @@ in the top-right of your screen you will see a star glyph and the word "Star":
 
 ![Star example](/assets/images/github_top_right.png)
 
-Click it - you've now "starred" the repo.  It now be in your list of starred repos.
+Click it - you've now "starred" the repo.  It's now be in _your_ list of stars.
 
-This list is accessible via the [Github API](https://docs.github.com/en/rest) and there is a [Python interface](https://github.com/PyGithub/PyGithub).
+These lists are accessible via the [Github API](https://docs.github.com/en/rest) and there is a [Python interface](https://github.com/PyGithub/PyGithub).
 
-The idea of Popular Gits is that if a group of people like a particular repo, 
-there's a good chance that others in that other repos they like will be liked by others in that group.
-
-So we get that larger list and rank it by how frequently they are starred.
+The idea of Popular Gits is that if a group of people like a particular repo, they probably have similar interests.
+What if you listed _all_ the repos they like and worked out which are _most_ liked?
+That's what we've done by looking at all the starred repos of everyone who starred that _particular_ repo.
+We give the examples of [QuantLib](/QuantLib.md) and [ccxt](/ccxt.md).
 
 **Note**: IT'S SLOW!  Due to the limitations on HTTP REST interfaces and understandable throttling by Github, 
 a significant source repo of hundreds or thousands of stars will take a long time to run - 
@@ -54,7 +55,7 @@ This is tested with Ubuntu Linux 22.04.  It should work with little effort on ot
 
 
 It will also be useful to install [SQLite Database Browser](https://sqlitebrowser.org/) so 
-that you can easily create `.csv` files and similar.
+that you can easily create `.csv` files.
 
 ## Examples
 
