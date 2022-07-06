@@ -23,7 +23,7 @@ These lists are accessible via the [Github API](https://docs.github.com/en/rest)
 The idea of Popular Gits is that if a group of people like a particular repo, they probably have similar interests.
 What if you listed _all_ the repos they like and worked out which are _most_ liked?
 That's what we've done by looking at all the starred repos of everyone who starred that _particular_ repo.
-We give the examples of [QuantLib](/QuantLib.md) and [ccxt](/ccxt.md).
+We give the examples of [QuantLib](/Quantlib.md) and [ccxt](/ccxt.md).
 
 **Note**: IT'S SLOW!  Due to the limitations on HTTP REST interfaces and understandable throttling by Github, 
 a significant source repo of hundreds or thousands of stars will take a long time to run - 
