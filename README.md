@@ -34,11 +34,21 @@ We use:
 
 ## Installation
 
+This is tested with Ubuntu Linux 22.04.  It should work with little effort on other Linuxen, MacOS and Windows.
+
 1. Install [sqlite3](https://www.sqlite.org/download.html)
 1. Install [Python](https://www.python.org/)
 1. `pip install PyGithub`
 1. Get a [Github account](https://github.com).  This is free and very easy.
    Once done, get a [Personal Access Token](https://github.com/settings/tokens).
+1. Put your Personal Access Token in environment variable `GITHUB_KEY` via
+
+   """shell
+   export GITHUB_KEY="<your Personal Access Token>"
+   """
+
+   you might put this in your `~/.bashrc` or similar.
+
 1. To experiment with Popular Gits, install [Jupyter Lab](https://jupyter.org/install) and then use [our notebook](/popular_gits.ipynb) to start.
 
 It will also be useful to install [SQLite Database Browser](https://sqlitebrowser.org/) so 
