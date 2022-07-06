@@ -1,4 +1,4 @@
-# Popular [CCXT](<github.com/ccxt/ccxt) Gits
+# Popular [CCXT](github.com/ccxt/ccxt) Gits
 
 This is a curated list produced using [Popular Gits](https://<github.com/profitviews/popular-gits).  
 
@@ -10,8 +10,8 @@ The Categories are manually added after a brief look at the repo.  This is usefu
 
 URL | Popularity | Categories
 ---|---|---
-<github.com/ccxt/ccxt>> | 24875 | 
-<github.com/public-apis/public-apis>> | 5592 | 
+<github.com/ccxt/ccxt> | 24875 | 
+<github.com/public-apis/public-apis> | 5592 | 
 <github.com/jwasham/coding-interview-university> | 5340 | 
 <github.com/ohmyzsh/ohmyzsh> | 4768 | 
 <github.com/codecrafters-io/build-your-own-x> | 4609 | 
