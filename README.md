@@ -43,9 +43,9 @@ This is tested with Ubuntu Linux 22.04.  It should work with little effort on ot
    Once done, get a [Personal Access Token](https://github.com/settings/tokens).
 1. Put your Personal Access Token in environment variable `GITHUB_KEY` via
 
-   """shell
+   ```shell
    export GITHUB_KEY="<your Personal Access Token>"
-   """
+   ```
 
    you might put this in your `~/.bashrc` or similar.
 
