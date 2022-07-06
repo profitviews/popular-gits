@@ -60,7 +60,7 @@ that you can easily create `.csv` files.
 ## Examples
 
 We at [ProfitView](https://profitview.net) have run this code on a couple or repos, and here's some truncated results:
-* [QuantLib](/QuantLib.md)
+* [QuantLib](/Quantlib.md)
 * [ccxt](/ccxt.md)
 
 We also have [a blog](https://profitview.net/blog/open-source-trading-projects) on this process.
