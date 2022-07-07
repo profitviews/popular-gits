@@ -64,3 +64,8 @@ We at [ProfitView](https://profitview.net) have run this code on a couple or rep
 * [ccxt](/ccxt.md)
 
 We also have [a blog](https://profitview.net/blog/open-source-trading-projects) on this process.
+
+## Categorised Lists
+
+While there may be some algorithmic ways to associate the repos, there's some value in checking their READMEs
+and assigning a category.  We have done this for the [top 150 of the QuantLib set](/QuantlibStarredGithubs_Top150.csv) producing [QuantlibPopularLists.csv](/QuantlibPopularLists.csv).  This is useful for extracting "Top 10" lists and similar
