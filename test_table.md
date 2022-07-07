@@ -1,3 +1,7 @@
+# Test Table
+
+This is a test to see why ccxt.md is not rendering properly
+
 URL | Popularity | Categories
 ---|---|---
 [github.com/ccxt/ccxt](github.com/ccxt/ccxt) | 24875 | None
