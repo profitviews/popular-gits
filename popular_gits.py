@@ -26,10 +26,6 @@ class popular_gits():
 
     page_size = 30
 
-    def __get_pages(paged):
-        """From a paged Github entity, create a generator of pages"""
-        return (paged.get_page(i) for i in range(0, paged.totalCount//popular_gits.page_size+1))
-
     def __init__(self, db_name, github_key, repo_org, repo_name):
         """Set up a repo to find its popular gits
         
@@ -83,7 +79,14 @@ class popular_gits():
            It will only commit if there's no failure
         """
         new_gits = defaultdict(int)
-        for spage in popular_gits.__get_pages(u.get_starred()):
+        starred = u.get_starred()
+        # Exclude those who star more than 1000 repos - this couldn't be done thoughtfully
+        if starred.totalCount > 1000:
+            page_count = 0
+            logging.info(f"Excluded user {u.login} because they starred {starred.totalCount} repos")
+        else:
+            page_count = starred.totalCount
+        for spage in (starred.get_page(i) for i in range(0, page_count//popular_gits.page_size+1)):
             for s in spage:
                 o, rp = s.full_name.split('/')
                 self.gits[(o,rp)]+=1
@@ -98,7 +101,9 @@ class popular_gits():
         """For all the repo's stargazers, if their repos haven't already been accumulated, do it now"""
         self.get_gits()
         with closing(self.con.cursor()) as cur:
-            for page in popular_gits.__get_pages(self.repo.get_stargazers()):
+            paged = self.repo.get_stargazers()
+            pages = (paged.get_page(i) for i in range(0, paged.totalCount//popular_gits.page_size+1))
+            for page in pages:
                 for u in page:
                     cur.execute("select * from users where login=:login", {"login": u.login})
                     if not cur.fetchone(): # No such user yet
