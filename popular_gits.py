@@ -9,6 +9,8 @@ import logging
 from contextlib import closing
 
 
+logging.basicConfig()
+
 class popular_gits():
     """Popular Gits - you know who you are.
     
@@ -26,7 +28,7 @@ class popular_gits():
 
     page_size = 30
 
-    def __init__(self, db_name, github_key, repo_org, repo_name):
+    def __init__(self, db_name, github_key, repo_org, repo_name, logger=logging.getLogger()):
         """Set up a repo to find its popular gits
         
         db_name: the name of the SQLite database that will be created (or accessed)
@@ -37,6 +39,7 @@ class popular_gits():
         self.db_name = db_name
         self.repo_org = repo_org
         self.repo_name = repo_name
+        self.logger=logger
         g = Github(github_key)
         self.repo = g.get_repo(self.repo_id)
 
@@ -49,7 +52,7 @@ class popular_gits():
             cur.execute('create table if not exists users (login text PRIMARY KEY, date text)')
             cur.execute('create table if not exists gits (org text UNIQUE, repo text UNIQUE, count int)')
             self.con.commit()
-            logging.info(f"Database {self.db_name} with tables 'users' and 'gits' exists")
+            self.logger.info(f"Database {self.db_name} with tables 'users' and 'gits' exists")
 
     def reset(self):
         """Remove all the data in the database and set it up again"""
@@ -58,7 +61,7 @@ class popular_gits():
             cur.execute("drop table gits")
             self.con.commit()
         self.__setup_db()
-        logging.info(f"Recreated database {self.db_name}")
+        self.logger.info(f"Recreated database {self.db_name}")
 
     @property
     def repo_id(self):
@@ -83,7 +86,7 @@ class popular_gits():
         # Exclude those who star more than 1000 repos - this couldn't be done thoughtfully
         if starred.totalCount > 1000:
             page_count = 0
-            logging.info(f"Excluded user {u.login} because they starred {starred.totalCount} repos")
+            self.logger.info(f"Excluded user {u.login} because they starred {starred.totalCount} repos")
         else:
             page_count = starred.totalCount
         for spage in (starred.get_page(i) for i in range(0, page_count//popular_gits.page_size+1)):
@@ -116,19 +119,19 @@ class popular_gits():
                 self.accumulate_gits()
                 return
             except KeyboardInterrupt:
-                logging.info("Interrupted - pausing")
+                self.logger.info("Interrupted - pausing")
                 break
             except requests.exceptions.ReadTimeout as rto:
-                logging.warning(f"Timeout {rto=}, {type(rto)=}.  Sleeping for 1 minute")
+                self.logger.warning(f"Timeout {rto=}, {type(rto)=}.  Sleeping for 1 minute")
                 time.sleep(60)
             except RateLimitExceededException as ree:
                 rate_limit = int(ree.headers['x-ratelimit-limit'])
                 reset_seconds = int(ree.headers['x-ratelimit-reset']) - int(time.time())
-                logging.warning(f"Rate Limit {rate_limit} breeched.  Resetting in {reset_seconds + 5} seconds")
+                self.logger.warning(f"Rate Limit {rate_limit} breeched.  Resetting in {reset_seconds + 5} seconds")
                 time.sleep(reset_seconds + 5)
             except GithubException as ge:
-                logging.warning(f"Github exception {ge=}, {type(ge)=}.  Sleeping for 1 minute")
+                self.logger.warning(f"Github exception {ge=}, {type(ge)=}.  Sleeping for 1 minute")
                 time.sleep(60)
             except BaseException as err:
-                logging.error(f"Error {err=}, {type(err)=}.  Exiting")
+                self.logger.error(f"Error {err=}, {type(err)=}.  Exiting")
                 break
