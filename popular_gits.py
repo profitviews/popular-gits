@@ -1,11 +1,12 @@
 
-from github import Github, RateLimitExceededException, GithubException
-from collections import defaultdict
 import sqlite3
-from datetime import datetime
 import time
 import requests
 import logging
+import csv
+from github import Github, RateLimitExceededException, GithubException, BadCredentialsException
+from collections import defaultdict
+from datetime import datetime
 from contextlib import closing
 
 
@@ -36,23 +37,34 @@ class popular_gits():
         repo_org: the 'repo_org' part of https://github.com/{repo_org}/{repo_name}
         repo_name: the 'repo_name' part
         """
-        self.db_name = db_name
-        self.repo_org = repo_org
-        self.repo_name = repo_name
-        self.logger=logger
-        g = Github(github_key)
-        self.repo = g.get_repo(self.repo_id)
-
-        self.gits = defaultdict(int)
-        self.con = sqlite3.connect(f'{self.db_name}.db')
-        self.__setup_db()
+        self._setUp = False
+        self._db_name = db_name
+        self._repo_org = repo_org
+        self._repo_name = repo_name
+        self._logger=logger
+        try:
+            g = Github(github_key)
+            self._repo = g.get_repo(self.repo_id)
+        except BadCredentialsException:
+            self._logger.error("Failed to authenticate Github: your key is probably incorrect")
+        else:
+            self.gits = defaultdict(int)
+            self.con = sqlite3.connect(f'{self._db_name}.db')
+            self.__setup_db()
+            self._setUp = True
     
+
+    @property
+    def setUp(self):
+        return self._setUp
+
+
     def __setup_db(self):
         with closing(self.con.cursor()) as cur:
             cur.execute('create table if not exists users (login text PRIMARY KEY, date text)')
             cur.execute('create table if not exists gits (org text UNIQUE, repo text UNIQUE, count int)')
             self.con.commit()
-            self.logger.info(f"Database {self.db_name} with tables 'users' and 'gits' exists")
+            self._logger.info(f"Database {self._db_name} with tables 'users' and 'gits' exists")
 
     def reset(self):
         """Remove all the data in the database and set it up again"""
@@ -61,11 +73,11 @@ class popular_gits():
             cur.execute("drop table gits")
             self.con.commit()
         self.__setup_db()
-        self.logger.info(f"Recreated database {self.db_name}")
+        self._logger.info(f"Recreated database {self._db_name}")
 
     @property
     def repo_id(self):
-        return f"{self.repo_org}/{self.repo_name}"
+        return f"{self._repo_org}/{self._repo_name}"
 
     def get_gits(self):
         """Extract the existing set of starry gits from the database into a dictionary"""
@@ -86,7 +98,7 @@ class popular_gits():
         # Exclude those who star more than 1000 repos - this couldn't be done thoughtfully
         if starred.totalCount > 1000:
             page_count = 0
-            self.logger.info(f"Excluded user {u.login} because they starred {starred.totalCount} repos")
+            self._logger.info(f"Excluded user {u.login} because they starred {starred.totalCount} repos")
         else:
             page_count = starred.totalCount
         for spage in (starred.get_page(i) for i in range(0, page_count//popular_gits.page_size+1)):
@@ -104,7 +116,7 @@ class popular_gits():
         """For all the repo's stargazers, if their repos haven't already been accumulated, do it now"""
         self.get_gits()
         with closing(self.con.cursor()) as cur:
-            paged = self.repo.get_stargazers()
+            paged = self._repo.get_stargazers()
             pages = (paged.get_page(i) for i in range(0, paged.totalCount//popular_gits.page_size+1))
             for page in pages:
                 for u in page:
@@ -119,19 +131,29 @@ class popular_gits():
                 self.accumulate_gits()
                 return
             except KeyboardInterrupt:
-                self.logger.info("Interrupted - pausing")
+                self._logger.info("Interrupted - pausing")
                 break
             except requests.exceptions.ReadTimeout as rto:
-                self.logger.warning(f"Timeout {rto=}, {type(rto)=}.  Sleeping for 1 minute")
+                self._logger.warning(f"Timeout {rto=}, {type(rto)=}.  Sleeping for 1 minute")
                 time.sleep(60)
             except RateLimitExceededException as ree:
                 rate_limit = int(ree.headers['x-ratelimit-limit'])
                 reset_seconds = int(ree.headers['x-ratelimit-reset']) - int(time.time())
-                self.logger.warning(f"Rate Limit {rate_limit} breeched.  Resetting in {reset_seconds + 5} seconds")
+                self._logger.warning(f"Rate Limit {rate_limit} breeched.  Resetting in {reset_seconds + 5} seconds")
                 time.sleep(reset_seconds + 5)
             except GithubException as ge:
-                self.logger.warning(f"Github exception {ge=}, {type(ge)=}.  Sleeping for 1 minute")
+                self._logger.warning(f"Github exception {ge=}, {type(ge)=}.  Sleeping for 1 minute")
                 time.sleep(60)
             except BaseException as err:
-                self.logger.error(f"Error {err=}, {type(err)=}.  Exiting")
+                self._logger.error(f"Error {err=}, {type(err)=}.  Exiting")
                 break
+
+    def gits_csv(self, git_file):
+        """Write results to CSV file"""
+        cur = self.con.cursor()
+        with closing(self.con.cursor()) as cur, open(git_file, 'w') as git_csv:
+            gc = csv.writer(git_csv)
+            cur.execute("select * from gits order by count desc")
+            while f := cur.fetchmany():                
+                for o, rp, c in f:
+                    gc.writerow([f"https://github.com/{o}/{rp}", c])
