@@ -66,6 +66,8 @@ chmod +x pg.py
 ./pg.py --github_key=<your key> pvcppdb profitviews cpp_crypto_algos
 ```
 
+If it crashes or you want to stop it during a long run, that's fine: if you restart (without the `--reset` option) it will take up where it left off.
+
 Other options are available.  Run `./pg.py --help`:
 
 ```
