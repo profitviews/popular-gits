@@ -137,7 +137,7 @@ result = dict(client.execute(query))
 totalCount = result['repository']['stargazerCount']
 ```
 
-#### Asych Contexts
+##### Asych Contexts
 
 If you wish to run a query in an asynchronous context (such as a [Jupyter Notebook](https://jupyter.org/)) you can use:
 
@@ -161,3 +161,10 @@ async def execute_query(client, query):
 ...
 result = dict(asyncio.get_event_loop().run_until_complete(execute_query(client, query)))
 totalCount = result['repository']['stargazerCount']
+```
+
+#### Exploring the Schema
+
+You can download and explore the [public schema](https://docs.github.com/en/graphql/overview/public-schema).
+
+There is also the very useful [Explorer](https://docs.github.com/en/graphql/overview/explorer) where you can run JSON queries directly.
