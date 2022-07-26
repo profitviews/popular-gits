@@ -104,4 +104,57 @@ We also have [a blog](https://profitview.net/blog/open-source-trading-projects) 
 While there may be some algorithmic ways to associate the repos, there's some value in checking their READMEs
 and assigning a category.  We have done this for the [top 150 of the QuantLib set](/QuantlibStarredGithubs_Top150.csv) producing [QuantlibPopularLists.csv](/QuantlibPopularLists.csv).  This is useful for extracting "Top 10" lists and similar
 
+## Notes
+### Using Github's Graph QL API
 
+The [Github Graph QL API](https://docs.github.com/en/graphql) can be used as an alternative to the main API when searching.  It would possibly have been a better choice for Popular Gits.
+We used it in one part of the code the [`get_relative_popularity()`](https://github.com/profitviews/popular-gits/blob/69e78e4a19bc92f10b19dfb5ed22ec77582718af/categorise.py#L54) function in [categorise.py](https://github.com/profitviews/popular-gits/blob/main/categorise.py).  In this case it is because the main API restricts the maximum `totalCount` of starrers of a repo to 40K (for some reason).  In the UI there's no such limit.  It's possible just to scrape the page for this info, but Graph QL is more efficient.
+
+#### You Need A New API Key
+
+To use the API your need a Github API key with specific permissions.  Follow the normal [instructions for the the key](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token), but in step (8) when deciding the scopes, use the set [shown here](https://docs.github.com/en/graphql/guides/forming-calls-with-graphql).
+
+#### GQL in Python
+
+For present purposes we want to use Python - [GQL](https://github.com/graphql-python/gql) is a good package.
+
+The prototype connection to Github Graph QL is:
+```python
+from gql import gql, Client
+from gql.transport.aiohttp import AIOHTTPTransport
+
+transport = AIOHTTPTransport(
+   url="https://api.github.com/graphql", 
+   headers={'Authorization': f'token {os.environ["GITQL_KEY"]}'})
+client = Client(transport=transport, fetch_schema_from_transport=True)
+
+query = gql('query { repository(owner:"profitviews", name:"popular-gits") {stargazerCount} }')
+
+result = dict(client.execute(query))
+
+totalCount = result['repository']['stargazerCount']
+```
+
+#### Asych Contexts
+
+If you wish to run a query in an asynchronous context (such as a [Jupyter Notebook](https://jupyter.org/)) you can use:
+
+```python
+...
+result = await client.execute_async(query)
+```
+
+If you want to write code that works in both contexts, you need to additionally:
+
+```python
+import nest_asyncio
+
+nest_asycnio.apply()
+...
+# Put the query in an async function - `await` outside an async context is a syntax error
+async def execute_query(client, query):
+   result = await client.execute_async(query)
+   return result
+...
+result = dict(asyncio.get_event_loop().run_until_complete(execute_query(client, query)))
+totalCount = result['repository']['stargazerCount']

@@ -84,6 +84,7 @@ def get_relative_popularity(popularity_file, output_file):
             if (rc := repo.get_stargazers().totalCount) >= 40_000:  # Magic max cut-off
                 query = gql(f'query {{ repository(owner:"{owner}", name:"{name}") {{stargazerCount}} }}')
                 # See execute_query: lets it work in Jupyter and other async contexts
-                rc = dict(asyncio.get_event_loop().run_until_complete(execute_query(client, query)))['repository']['stargazerCount']
+                result = dict(asyncio.get_event_loop().run_until_complete(execute_query(client, query)))
+                rc = result['repository']['stargazerCount']
                 print(f"Repo count: {rc}")
             r.writerow(list(git.values()) + [rc, int(git['Popularity'])/rc])
