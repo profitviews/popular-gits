@@ -32,7 +32,7 @@ typically many hours or a few days.
 ## Implementation
 
 We use:
-* the [Github API](https://docs.github.com/en/rest) and [PyGithub](https://github.com/PyGithub/PyGithub)
+* the [Github API](https://docs.github.com/en/rest) and [PyGithub](https://github.com/PyGithub/PyGithub) (and, in small way, [Github Graph QL API](https://docs.github.com/en/graphql))
 * [Sqlite](https://www.sqlite.org/index.html) with the [sqlite3](https://docs.python.org/3/library/sqlite3.html) Python package
 
 ## Installation
@@ -147,6 +147,7 @@ result = await client.execute_async(query)
 If you want to write code that works in both contexts, you need to additionally:
 
 ```python
+import asynchio
 import nest_asyncio
 
 nest_asycnio.apply()
