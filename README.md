@@ -57,6 +57,40 @@ This is tested with Ubuntu Linux 22.04.  It should work with little effort on ot
 It will also be useful to install [SQLite Database Browser](https://sqlitebrowser.org/) so 
 that you can easily create `.csv` files.
 
+## Command Line
+
+Use `pg.py` to run Poplular Gits on the command line (set it executable first):
+
+```shell
+chmod +x pg.py
+./pg.py --github_key=<your key> pvcppdb profitviews cpp_crypto_algos
+```
+
+Other options are available.  Run `./pg.py --help`:
+
+```
+usage: pg.py [-h] [--reset]
+             [--log {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}]
+             [--github_key GITHUB_KEY] [--csv CSV_FILE]
+             db_name org repo
+
+positional arguments:
+  db_name               Root name of SQLite database to be created or used
+  org                   Github organization name
+  repo                  Github repo name, i.e. github.com/org/repo
+
+options:
+  -h, --help            show this help message and exit
+  --reset, -r           Erase the database on start if it exists
+  --log {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}, -l {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}
+                        Specify the log level. Default is WARNING
+  --github_key GITHUB_KEY, -k GITHUB_KEY
+                        Specify your GitHub key. Otherwise it will look at
+                        $GITHUB_KEY
+  --csv CSV_FILE, -c CSV_FILE
+                        Output data as CSV file
+```
+
 ## Examples
 
 We at [ProfitView](https://profitview.net) have run this code on a couple or repos, and here's some truncated results:
@@ -69,3 +103,5 @@ We also have [a blog](https://profitview.net/blog/open-source-trading-projects) 
 
 While there may be some algorithmic ways to associate the repos, there's some value in checking their READMEs
 and assigning a category.  We have done this for the [top 150 of the QuantLib set](/QuantlibStarredGithubs_Top150.csv) producing [QuantlibPopularLists.csv](/QuantlibPopularLists.csv).  This is useful for extracting "Top 10" lists and similar
+
+
