@@ -9,6 +9,9 @@ Looking back, well, they weren't so bad.  Good on 'em really!  I would've if I c
 
 This repo is is dedicated to the popular gits.
 
+
+**Case Study**: [Open Source Trading Projects](https://profitview.net/blog/open-source-trading-projects)
+
 ## How it works
 
 In [Github](https://github.com) when you open a repo (like [popular-gits](https://github.com/profitviews/popular-gits)) 
