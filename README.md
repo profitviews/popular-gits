@@ -9,8 +9,9 @@ Looking back, well, they weren't so bad.  Good on 'em really!  I would've if I c
 
 This repo is is dedicated to the popular gits.
 
+## Case Study
 
-**Case Study**: [Open Source Trading Projects](https://profitview.net/blog/open-source-trading-projects)
+[Quant/Trading Projects](https://profitview.net/blog/open-source-trading-projects)
 
 ## How it works
 
