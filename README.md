@@ -11,6 +11,8 @@ This repo is is dedicated to the popular gits.
 
 ## [Quant/Trading Projects Case Study](https://profitview.net/blog/open-source-trading-projects)
 
+This example was [featured in eFC](https://www.efinancialcareers.com/news/2022/07/coding-languages-for-trading-algorithms) and other places.
+
 ## How it works
 
 In [Github](https://github.com) when you open a repo (like [popular-gits](https://github.com/profitviews/popular-gits)) 
